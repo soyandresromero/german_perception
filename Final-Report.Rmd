@@ -3,9 +3,10 @@ title: "Final Report"
 author: "Andrés Romero"
 date: "2023-01-25"
 output:
-  github_document: default
-  html_document: default
-  pdf_document: default
+  github_document:
+    fig_width: 5
+    fig_height: 5
+    dev: jpeg
 ---
 
 ## Loading the Dataset
