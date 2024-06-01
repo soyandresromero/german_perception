@@ -1,0 +1,104 @@
+---
+title: "Final Report"
+author: "Andrés Romero"
+date: "2023-01-25"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+## Loading the Dataset
+
+```{r}
+library(googlesheets4)
+dataset <- read_sheet('https://docs.google.com/spreadsheets/d/1G5XRN7adCeNlLVsgSiH3Cu2_6h2LXzZarpfgcMiBhWg/edit#gid=1392778802',sheet='Final')
+dataset
+```
+
+
+```{r}
+df <- dataset[which(!is.na(dataset$Alter)),]
+df <- df[which(df$Muttersprache=="Deutsch"),]
+cols <- c('Name','Alter','Geschlecht','Geburtsort','Höchster Bildungsabschluss','Fach','Beruf','Muttersprache','Besten Aufnahme','Charaktereigenschaften','Aufnahme','Score','Sprache 1','Level 1','Sprache 2','Level 2','Sprache 3','Level 3','Sprache 4','Level 4')
+df <- df[cols]
+df['nlang'] <- 4 - is.na(df$`Sprache 1`) - is.na(df$`Sprache 2`) - is.na(df$`Sprache 3`) - is.na(df$`Sprache 4`)
+df$Charaktereigenschaften <- as.factor(df$Charaktereigenschaften)
+df$Geschlecht <- as.factor(df$Geschlecht)
+df$Muttersprache <- as.factor(df$Muttersprache)
+df$`Höchster Bildungsabschluss` <- factor(df$`Höchster Bildungsabschluss`,ordered = TRUE, 
+                                          levels = c("Unterer Schulabschluss", "Abitur oder gleichwertiger Abschluss","Bachelor","Postgraduierten-Abschluss","Master-Abschluss","Doktorat"))
+df['German_Pref'] <- (df$`Besten Aufnahme`=="Sprecher/in 1" | df$`Besten Aufnahme`=="Sprecher/in 2")
+df$German_Pref_01 <- as.numeric(as.factor(df$German_Pref))-1
+df$`Besten Aufnahme` <- as.factor(df$`Besten Aufnahme`)
+df
+```
+
+
+```{r}
+cols_r <- c('Name','Alter','Geschlecht','Geburtsort','Höchster Bildungsabschluss','Fach','Beruf','Muttersprache','Besten Aufnahme','nlang','German_Pref','German_Pref_01')
+df_reduced <- df[cols_r]
+df_reduced <- df_reduced[!duplicated(df_reduced$Name),]
+df_reduced
+```
+
+```{r}
+library(ggplot2)
+ggplot(df_reduced, aes(x=German_Pref))+
+    geom_bar(fill="dodgerblue")+
+    labs(title="German Speaker Selection", x = "German Speaker was Chosen?", y = "No. Responses")+
+    theme_light()
+```
+
+
+
+```{r}
+library(ggplot2)
+ggplot(df_reduced, aes(x=German_Pref, fill=Geschlecht))+
+    geom_bar()+
+    labs(title="Choice per Gender", x = "German Speaker was Chosen?", y = "No. Responses")+
+    theme_light()
+```
+```{r}
+ggplot(df_reduced, aes(x=German_Pref, fill=`Besten Aufnahme`))+
+    geom_bar()+
+    labs(title="Detail per Speaker", x = "German Speaker was Chosen?", y = "No. Responses")+
+    theme_light()
+```
+
+```{r}
+ggplot(df_reduced, aes(x=as.factor(Alter), fill = German_Pref))+
+    geom_bar()+
+    labs(title="Detail per Age", x = "Age", y = "No. Respondents")+
+    theme_light()
+```
+```{r}
+ggplot(df_reduced, aes(x=German_Pref, fill=`Höchster Bildungsabschluss`))+
+    geom_bar()+
+    labs(title="Detail per Speaker", x = "German Speaker was Chosen?", y = "No. Responses")+
+    theme_light()
+```
+
+```{r}
+library(party)
+tree <- ctree(`German_Pref` ~  Alter + nlang + Geschlecht + `Höchster Bildungsabschluss`, data = df_reduced)
+tree
+plot(tree)
+```
+
+
+```{r}
+library(rpart)
+library(rpart.plot)
+tree <- rpart(`German_Pref` ~  Alter + nlang + Geschlecht + `Höchster Bildungsabschluss`, data = df_reduced)
+tree
+rpart.plot(tree)
+```
+```{r}
+printcp(tree)
+```
+
+```{r}
+an <- anova(glm(`German_Pref` ~  Alter + nlang + Geschlecht + `Höchster Bildungsabschluss`-1, data=df_reduced))
+an
+```
+
