@@ -1,6 +1,16 @@
 # Attitudes of native German speakers towards accents of bilingual speakers in German
-Results from a Survey Made to some German speakers in a class of Research Methods for English Linguistics. 
+Results from a Survey Made to some German speakers in a class of Research Methods for English Linguistics. The project was made with 4 more students who collaborated with the design of the Survey and the Experiment. 
 
+----
+## Project Description
+
+As we wanted to understand if there was any bias in how the German speakers perceived accents from non-native speakers, we decided to record 4 people reading the same text which was then listened by German Speakers to judge their perceptions of the readers. The group of readers was made of 2 women and 2 men: one native German Speaker and one non-native German Speaker for each Gender. 
+
+All the recordings and the perceptions were gathered through [this survey] that was feeding a Google Sheets file that at the same time was being read in real time by [this dashboard] made by me in Google Looker Studio. It contains a summary of the results from the survey respondents.
+
+Done that, a more precise review was made in form of an R Markdown file as shown here:
+
+----
 
 
 ## Loading the Dataset
@@ -11,16 +21,6 @@ dataset <- read_sheet('https://docs.google.com/spreadsheets/d/1G5XRN7adCeNlLVsgS
 ```
 
     ## ! Using an auto-discovered, cached token.
-
-    ##   To suppress this message, modify your code or options to clearly consent to
-    ##   the use of a cached token.
-
-    ##   See gargle's "Non-interactive auth" vignette for more details:
-
-    ##   <https://gargle.r-lib.org/articles/non-interactive-auth.html>
-
-    ## ℹ The googlesheets4 package is using a cached token for
-    ##   'soyandresromero@gmail.com'.
 
     ## ✔ Reading from "Survey Results".
 
