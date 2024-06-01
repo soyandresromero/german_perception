@@ -1,3 +1,5 @@
+![Static Badge](https://img.shields.io/badge/Lang-R-blue?logo=R) ![Static Badge](https://img.shields.io/badge/Visualization-LookerStudio-brightgreen?logo=Looker) ![Static Badge](https://img.shields.io/badge/Others-Survey-orange)
+
 # Attitudes of native German speakers towards accents of bilingual speakers in German
 Results from a Survey Made to some German speakers in a class of Research Methods for English Linguistics. The project was made with 4 more students who collaborated with the design of the Survey and the Experiment. 
 
